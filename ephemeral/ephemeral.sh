@@ -65,11 +65,11 @@ echo DEVICE $drives | tee /etc/mdadm.conf
 mdadm --detail --scan | tee -a /etc/mdadm.conf
 blockdev --setra 65536 /dev/md0
 mkfs -t ext3 /dev/md0
-mount -t ext3 -o noatime /dev/md0 /mnt
+mount -t ext3 -o noatime /dev/md0 /opt
 
 # Remove xvdb/sdb from fstab
 chmod 777 /etc/fstab
 sed -i "/${DRIVE_SCHEME}b/d" /etc/fstab
 
 # Make raid appear on reboot
-echo "/dev/md0 /mnt ext3 noatime,nofail 0 0" | tee -a /etc/fstab
+echo "/dev/md0 /opt ext3 noatime,nofail 0 0" | tee -a /etc/fstab
