@@ -1,0 +1,9 @@
+version: "2"
+
+services:
+  nginx:
+    image: nginx
+    links:
+      - postgres_db:postgres
+  postgres_db:
+    image: postgres:latest

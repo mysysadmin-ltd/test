@@ -1,0 +1,30 @@
+---
+
+- hosts: localhost
+  tasks:
+    - name: Create IAM roles
+      iam:
+        state: present
+        iam_type: role
+        name: myrole
+
+    - name: Assign policies to the IAM roles
+      iam_policy:
+        state: present
+        iam_type: role
+        iam_name: myrole
+        policy_name: s3_access
+        policy_document: "s3_policy.json"
+
+    - name: Wait for 40 seconds to ensure IAM role policies are applied
+      pause:
+        seconds: 40
+
+    # Assumes AWS_ACCESS_KEY and AWS_SECRET_KEY are set
+    - name: Create ec2 instance
+      ec2:
+        key_name: ec2-user
+        region: eu-west-1
+        instance_type: t2.micro
+        image: ami-ebd02392
+        instance_profile_name: myrole
